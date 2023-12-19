@@ -1,8 +1,8 @@
 class MusicListModel {
-  final String musicName;
-  final String signerName;
-  final String musicTime;
-  final bool isPlayed;
+  String? musicName;
+  String? signerName;
+  String? musicTime;
+  bool? isPlayed;
 
   MusicListModel({
     required this.musicName,
@@ -17,4 +17,18 @@ class MusicListModel {
         musicTime: data.musicTime,
         isPlayed: data.isPlayed,
       );
+
+  MusicListModel.copyWith({
+    String? musicName,
+    String? signerName,
+    String? musicTime,
+    bool? isPlayed,
+  }) {
+    MusicListModel(
+      musicName: musicName ?? this.musicName,
+      signerName: signerName ?? this.signerName,
+      musicTime: musicTime ?? this.musicTime,
+      isPlayed: isPlayed ?? this.isPlayed,
+    );
+  }
 }

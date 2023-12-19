@@ -25,7 +25,7 @@ class SliderController extends StatelessWidget {
             child: Row(
               children: [
                 Text(
-                  state.currentValue.toStringAsFixed(2).replaceAll('.', ':'),
+                  controller.globalCurrentTime.toStringAsFixed(2).replaceAll('.', ':'),
                   style: const TextStyle(
                     color: Colors.white,
                   ),
@@ -35,10 +35,14 @@ class SliderController extends StatelessWidget {
                     activeColor: const Color(0xFFf75191),
                     inactiveColor: const Color(0xFF8d9298),
                     thumbColor: Colors.white,
-                    value: state.currentValue,
+                    value: controller.globalCurrentTime,
                     min: 0.0,
                     max: maxTime,
                     onChanged: (double value) {
+                      // controller.isPlay = true;
+                      // controller.add(PlayOrStopEvent( musicTime:double.parse( musicTime.replaceAll(' ', '').replaceAll(':', '.').trim(), ), currentTime: value));
+
+                      // controller.isPlay = false;
                       controller.add(
                         ChangeCurrentSliderPositionEvent(newValue: value),
                       );

@@ -11,8 +11,9 @@ class ChangeCurrentSliderPositionEvent extends PlayControllerEvent {
 
 class PlayOrStopEvent extends PlayControllerEvent {
   final double musicTime;
+  final double currentTime;
 
-  PlayOrStopEvent({required this.musicTime});
+  PlayOrStopEvent({required this.musicTime, required this.currentTime});
 }
 
 class EmitANewTimerEvent extends PlayControllerEvent {

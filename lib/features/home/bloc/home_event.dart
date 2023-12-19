@@ -9,3 +9,9 @@ class ChangeSelectedItemHomeEvent extends HomeEvent {
 
   ChangeSelectedItemHomeEvent({required this.currentIndex});
 }
+
+class ChangeSongEvent extends HomeEvent {
+  final MusicListModel currentSong;
+
+  ChangeSongEvent({required this.currentSong});
+}

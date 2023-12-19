@@ -42,7 +42,7 @@ class ControllersWidget extends StatelessWidget {
           child: Center(
             child: IconButton(
               icon: controller.isPlay ? const Icon(Icons.pause, color: Color(0xFF192229), size: 60) : const Icon(Icons.play_arrow, color: Color(0xFF192229), size: 60),
-              onPressed: () => controller.add(PlayOrStopEvent(musicTime: musicTime)),
+              onPressed: () => controller.add(PlayOrStopEvent(musicTime: musicTime, currentTime: context.read<PlayControllerBloc>().globalCurrentTime)),
             ),
           ),
         );

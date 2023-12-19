@@ -35,41 +35,53 @@ class HomeMusicItems extends StatelessWidget {
     );
   }
 
-  Widget _buildMusicContent(MusicListModel currentSong, BuildContext context) {
-    return InkWell(
-      onTap: () => Navigator.push(
+  void _onSongPressed(BuildContext context, MusicListModel currentSong) {
+    context.read<HomeBloc>().add(ChangeSongEvent(currentSong: currentSong));
+    context.read<PlayControllerBloc>().globalCurrentTime = 0.0;
+    context.read<PlayControllerBloc>().isPlay = false;
+    Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (_) => SongPlayerScreen(
-            musicName: currentSong.musicName,
-            signerName: currentSong.signerName,
-            musicTime: currentSong.musicTime,
+            builder: (_) => SongPlayerScreen(
+                  musicName: currentSong.musicName!,
+                  signerName: currentSong.signerName!,
+                  musicTime: currentSong.musicTime!,
+                )));
+  }
+
+  Widget _buildMusicContent(
+    MusicListModel currentSong,
+    BuildContext context,
+  ) {
+    return BlocBuilder<HomeBloc, HomeState>(
+      builder: (context, state) {
+        return Container(
+          margin: const EdgeInsets.symmetric(horizontal: 10),
+          decoration: BoxDecoration(
+            color: currentSong.isPlayed! ? Colors.white.withOpacity(.2) : null,
+            borderRadius: BorderRadius.circular(10),
           ),
-        ),
-      ),
-      child: Container(
-        margin: const EdgeInsets.symmetric(horizontal: 10),
-        decoration: BoxDecoration(
-          color: currentSong.isPlayed ? Colors.white.withOpacity(.2) : null,
-          borderRadius: BorderRadius.circular(10),
-        ),
-        child: ListTile(
-          leading: CircleAvatar(
-            backgroundColor: currentSong.isPlayed
-                ? LightTheme.of(context).secondaryColor
-                : Colors.white,
-            child: Icon(
-              currentSong.isPlayed ? Icons.pause : Icons.play_arrow,
-              color: currentSong.isPlayed
-                  ? Colors.white
-                  : LightTheme.of(context).secondaryColor,
+          child: InkWell(
+            onTap: () => _onSongPressed(context, currentSong),
+            child: ListTile(
+              leading: CircleAvatar(
+                backgroundColor: currentSong.isPlayed!
+                    ? LightTheme.of(context).secondaryColor
+                    : Colors.white,
+                child: Icon(
+                  currentSong.isPlayed! ? Icons.pause : Icons.play_arrow,
+                  color: currentSong.isPlayed!
+                      ? Colors.white
+                      : LightTheme.of(context).secondaryColor,
+                ),
+              ),
+              title: _commonTextBody(currentSong.musicName!),
+              subtitle: _commonTextBody(currentSong.signerName!),
+              trailing: _commonTextBody(currentSong.musicTime!),
             ),
           ),
-          title: _commonTextBody(currentSong.musicName),
-          subtitle: _commonTextBody(currentSong.signerName),
-          trailing: _commonTextBody(currentSong.musicTime),
-        ),
-      ),
+        );
+      },
     );
   }
 

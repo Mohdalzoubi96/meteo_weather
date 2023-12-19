@@ -30,7 +30,7 @@ class HomeScreen extends StatelessWidget {
   }
 
   Widget _getBody(HomeState state) {
-    if (state is HomeMusicListState || state is HomeInitial) {
+    if (state is HomeMusicListState || state is HomeInitial || state is HomeRefreshState) {
       return const HomeMusicItems();
     } else if (state is HomeSearchListState) {
       return const HomeSearchItems();

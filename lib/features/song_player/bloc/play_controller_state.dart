@@ -4,9 +4,8 @@ part of 'play_controller_bloc.dart';
 abstract class PlayControllerState {}
 
 class PlayControllerInitial extends PlayControllerState {
-  final double currentValue;
 
-  PlayControllerInitial({required this.currentValue});
+  PlayControllerInitial();
 }
 
 class RefreshState extends PlayControllerState {

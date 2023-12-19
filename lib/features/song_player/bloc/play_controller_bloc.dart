@@ -11,12 +11,28 @@ part 'play_controller_state.dart';
 class PlayControllerBloc
     extends Bloc<PlayControllerEvent, PlayControllerState> {
   bool isPlay = false;
+  double globalCurrentTime = 0.0;
+  Timer? _timer;
 
-  PlayControllerBloc() : super(PlayControllerInitial(currentValue: 0)) {
+  PlayControllerBloc() : super(PlayControllerInitial()) {
     on<PlayControllerEvent>((event, emit) async {
       if (event is ChangeCurrentSliderPositionEvent) {
+        if(event.newValue >= 0.60 && event.newValue <= 1.00){
+          globalCurrentTime = 1.00;
+        } else if(event.newValue >= 1.60 && event.newValue <= 2.00){
+          globalCurrentTime = 2.00;
+        } else if(event.newValue >= 2.60 && event.newValue <= 3.00){
+          globalCurrentTime = 3.00;
+        } else if(event.newValue >= 3.60 && event.newValue <= 4.00){
+          globalCurrentTime = 4.00;
+        } else if(event.newValue >= 4.60 && event.newValue <= 5.00){
+          globalCurrentTime = 5.00;
+        } else{
+          globalCurrentTime = event.newValue;
+        }
+
         emit(RefreshState());
-        emit(PlayControllerInitial(currentValue: event.newValue));
+        emit(PlayControllerInitial());
       }
     });
 
@@ -32,7 +48,7 @@ class PlayControllerBloc
     Emitter<PlayControllerState> emit,
   ) async {
     emit(RefreshState());
-    emit(PlayControllerInitial(currentValue: event.newValue));
+    emit(PlayControllerInitial());
   }
 
   Future<void> _startCountMusic(
@@ -40,38 +56,30 @@ class PlayControllerBloc
     Emitter<PlayControllerState> emit,
   ) async {
     isPlay = !isPlay;
-    double totalTime = event.musicTime * 60;
 
-    /// Total time in seconds
-    double currentTime = (state as PlayControllerInitial).currentValue;
-
-    /// Current time counter
-    Timer.periodic(const Duration(seconds: 1), (timer) async {
-      if (!isPlay) {
+    _timer = Timer.periodic(const Duration(seconds: 1), (timer) async {
+      if (!isPlay){
         timer.cancel();
-        add(EmitANewTimerEvent(newValue: 0));
-        return;
-      } else {
-        currentTime++;
-      }
-
-      /// Check if the current time is within the totalTime window
-      if (currentTime <= totalTime) {
-        int seconds = currentTime.toInt();
-        Duration duration = Duration(seconds: seconds);
-
-        String formattedDuration =
-            '${duration.inMinutes}:${(duration.inSeconds.remainder(60) % 60).toString().padLeft(2, '0')}';
-
-        await _addNewTimerEvent(
-          double.parse(
-            formattedDuration.replaceAll(':', '.'),
-          ),
-          emit,
-        );
-      } else {
-        /// Stop the timer when the totalTime is over
-        timer.cancel();
+        add(EmitANewTimerEvent(newValue: globalCurrentTime));
+      } else{
+        globalCurrentTime += 0.01;
+        if (double.parse(globalCurrentTime.toStringAsFixed(2)) == 0.60) {
+          globalCurrentTime = 1.00;
+        } else if (double.parse(globalCurrentTime.toStringAsFixed(2)) == 1.60) {
+          globalCurrentTime = 2.00;
+        } else if (double.parse(globalCurrentTime.toStringAsFixed(2)) == 2.60) {
+          globalCurrentTime = 3.00;
+        } else if (double.parse(globalCurrentTime.toStringAsFixed(2)) == 3.60) {
+          globalCurrentTime = 4.00;
+        } else if (double.parse(globalCurrentTime.toStringAsFixed(2)) == 4.60) {
+          globalCurrentTime = 5.00;
+        }
+        _addNewTimerEvent(globalCurrentTime, emit);
+        if (double.parse(globalCurrentTime.toStringAsFixed(2)) == event.musicTime) {
+          globalCurrentTime = 0.0;
+          timer.cancel();
+          isPlay = !isPlay;
+        }
       }
     });
   }

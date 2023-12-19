@@ -25,3 +25,7 @@ class HomePodcastListState extends HomeState {
 class HomeSettingListState extends HomeState {
   const HomeSettingListState(super.index);
 }
+
+class HomeRefreshState extends HomeState {
+  const HomeRefreshState(super.index);
+}
