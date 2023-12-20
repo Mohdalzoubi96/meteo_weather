@@ -17,17 +17,17 @@ class PlayControllerBloc
   PlayControllerBloc() : super(PlayControllerInitial()) {
     on<PlayControllerEvent>((event, emit) async {
       if (event is ChangeCurrentSliderPositionEvent) {
-        if(event.newValue >= 0.60 && event.newValue <= 1.00){
+        if (event.newValue >= 0.60 && event.newValue <= 1.00) {
           globalCurrentTime = 1.00;
-        } else if(event.newValue >= 1.60 && event.newValue <= 2.00){
+        } else if (event.newValue >= 1.60 && event.newValue <= 2.00) {
           globalCurrentTime = 2.00;
-        } else if(event.newValue >= 2.60 && event.newValue <= 3.00){
+        } else if (event.newValue >= 2.60 && event.newValue <= 3.00) {
           globalCurrentTime = 3.00;
-        } else if(event.newValue >= 3.60 && event.newValue <= 4.00){
+        } else if (event.newValue >= 3.60 && event.newValue <= 4.00) {
           globalCurrentTime = 4.00;
-        } else if(event.newValue >= 4.60 && event.newValue <= 5.00){
+        } else if (event.newValue >= 4.60 && event.newValue <= 5.00) {
           globalCurrentTime = 5.00;
-        } else{
+        } else {
           globalCurrentTime = event.newValue;
         }
 
@@ -57,11 +57,22 @@ class PlayControllerBloc
   ) async {
     isPlay = !isPlay;
 
+    if (isPlay) {
+      globalCurrentTime += 0.01;
+    }
+    Future.delayed(
+      const Duration(milliseconds: 300),
+          () => add(
+        EmitANewTimerEvent(newValue: globalCurrentTime),
+      ),
+    );
+      // EmitANewTimerEvent(newValue: globalCurrentTime);
+    // }
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) async {
-      if (!isPlay){
+      if (!isPlay) {
         timer.cancel();
         add(EmitANewTimerEvent(newValue: globalCurrentTime));
-      } else{
+      } else {
         globalCurrentTime += 0.01;
         if (double.parse(globalCurrentTime.toStringAsFixed(2)) == 0.60) {
           globalCurrentTime = 1.00;
@@ -75,7 +86,8 @@ class PlayControllerBloc
           globalCurrentTime = 5.00;
         }
         _addNewTimerEvent(globalCurrentTime, emit);
-        if (double.parse(globalCurrentTime.toStringAsFixed(2)) == event.musicTime) {
+        if (double.parse(globalCurrentTime.toStringAsFixed(2)) ==
+            event.musicTime) {
           globalCurrentTime = 0.0;
           timer.cancel();
           isPlay = !isPlay;

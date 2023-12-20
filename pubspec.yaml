@@ -41,6 +41,7 @@ dependencies:
   equatable: ^2.0.5
   flutter_palette: ^1.1.0+1
   awesome_bottom_bar: ^1.2.4
+  blur: ^3.1.0
 
 dev_dependencies:
   flutter_test:

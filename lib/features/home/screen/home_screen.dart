@@ -14,6 +14,7 @@ class HomeScreen extends StatelessWidget {
         return Scaffold(
           backgroundColor: Colors.black,
           bottomNavigationBar: BottomBarInspiredFancy(
+            curve: Curves.linearToEaseOut,
             items: items,
             backgroundColor: const Color(0xFF23272d),
             color: color,
